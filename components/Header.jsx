@@ -5,7 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Poppins } from "next/font/google";
 import { BiSolidReport } from "react-icons/bi";
-
+import { IoHomeSharp } from "react-icons/io5";
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
@@ -140,7 +140,7 @@ export default function Header() {
                             setMenuOpen(false);
                             router.push("/competition");
                           }}
-                          icon={<BiSolidReport className="text-gray-200" />}
+                          icon={<IoHomeSharp className="text-gray-200" />}
                           label="Main Page"
                         />
                         {/* ✅ فقط التقارير */}

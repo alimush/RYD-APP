@@ -37,7 +37,7 @@ export default function CompetitionPage() {
       });
 
       if (res.ok) {
-        setMessage({ type: "success", text: "✅ تم إرسال المعلومات بنجاح!" });
+        setMessage({ type: "success", text: " تم إرسال المعلومات بنجاح" });
         setFormData({
           customerName: "",
           customerCode: "",
