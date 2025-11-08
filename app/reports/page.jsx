@@ -69,10 +69,29 @@ export default function ReportsPage() {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
         <h1 className="text-3xl font-bold flex items-center gap-3 text-gray-700">
           <FaFileAlt className="text-gray-700" />
-          <span>تقارير المسابقة</span>
+          <span>تقرير المسابقة</span>
         </h1>
+        
 
         {/* 🔍 فلتر الاسم */}
+        {!loading && filtered.length > 0 && (
+    <button
+      onClick={() => {
+        import("xlsx").then((XLSX) => {
+          const cleanData = filtered.map(({ _id, __v, updatedAt, ...rest }) => rest);
+          const ws = XLSX.utils.json_to_sheet(cleanData);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, "Reports");
+          XLSX.writeFile(wb, "Competition_Reports.xlsx");
+        });
+      }}
+      className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg shadow font-medium flex items-center gap-2 transition"
+    >
+      <FaFileAlt className="text-white" />
+      <span>Excel</span>
+    </button>
+  )}
+        
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <FaFilter className="text-gray-600 text-lg" />
           <Select
@@ -100,7 +119,14 @@ export default function ReportsPage() {
             }}
           />
         </div>
+        
+       
+       
       </div>
+      
+
+
+      
 
       {/* 📋 الحالات */}
       <AnimatePresence mode="wait">
@@ -174,6 +200,7 @@ export default function ReportsPage() {
           </motion.div>
         )}
       </AnimatePresence>
+      
 
       {/* 🪶 Popup التفاصيل */}
       <AnimatePresence>

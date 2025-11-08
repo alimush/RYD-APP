@@ -74,7 +74,7 @@ export default function Header() {
                        bg-gradient-to-r from-gray-200 via-gray-100 to-white
                        text-transparent bg-clip-text"
           >
-            RYD Portal
+          AlRiyad Portal
           </h1>
         </div>
 
