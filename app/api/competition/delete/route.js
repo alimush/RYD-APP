@@ -1,30 +1,40 @@
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
 import { connectDB } from "@/lib/mongodb";
+import mongoose from "mongoose";
 
-const competitionSchema = new mongoose.Schema({
-  customerName: String,
-  customerCode: String,
-  invoiceNumber: String,
-  phone: String,
-  instagram: String,
-  branch: String,
-  source: String,
-});
+// ✅ تعريف الـ Schema
+const CompetitionSchema = new mongoose.Schema(
+  {
+    customerName: String,
+    customerCode: String,
+    invoiceNumber: String,
+    phone: String,
+    instagram: String,
+    branch: String,
+    source: String,
+  },
+  { timestamps: true }
+);
 
+// ✅ تثبيت اسم الجدول "competition"
 const Competition =
   mongoose.models.Competition ||
-  mongoose.model("Competition", competitionSchema, "competition");
+  mongoose.model("Competition", CompetitionSchema, "competition");
 
-export async function GET() {
+// ✅ دالة الحذف الجماعي
+export async function DELETE() {
   try {
     await connectDB();
-    const data = await Competition.find({}).lean();
-    return NextResponse.json(data);
+
+    const result = await Competition.deleteMany({});
+    return NextResponse.json({
+      success: true,
+      message: `Deleted ${result.deletedCount} documents successfully.`,
+    });
   } catch (err) {
-    console.error("❌ Error fetching competition:", err);
+    console.error("❌ Error deleting all documents:", err);
     return NextResponse.json(
-      { message: "Error fetching data", error: err.message },
+      { success: false, message: "Failed to delete all", error: err.message },
       { status: 500 }
     );
   }
