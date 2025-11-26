@@ -26,18 +26,20 @@ export default function CompetitionPage() {
   });
 
   const [message, setMessage] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);   // 🔥 بدأ التحميل
+  
     try {
       const res = await fetch("/api/competition", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
+  
       if (res.ok) {
-        setMessage({ type: "success", text: " تم إرسال المعلومات بنجاح" });
+        setMessage({ type: "success", text: "تم إرسال المعلومات بنجاح" });
         setFormData({
           customerName: "",
           customerCode: "",
@@ -54,6 +56,7 @@ export default function CompetitionPage() {
       console.error(err);
       setMessage({ type: "error", text: "⚠️ حدث خطأ أثناء الإرسال." });
     } finally {
+      setLoading(false); // 🔥 إيقاف التحميل بعد الإرسال
       setTimeout(() => setMessage(null), 3000);
     }
   };
@@ -187,17 +190,24 @@ export default function CompetitionPage() {
             </motion.select>
           </label>
 
-          {/* زر الإرسال */}
           <motion.button
-            type="submit"
-            className="w-full mt-6 bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 
-                       text-white font-bold py-3 rounded-2xl shadow-md 
-                       hover:shadow-lg flex items-center justify-center gap-3 transition-all"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <FaPaperPlane className="text-lg" /> إرسال المعلومات
-          </motion.button>
+  type="submit"
+  disabled={loading}
+  className={`w-full mt-6 bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 
+             text-white font-bold py-3 rounded-2xl shadow-md 
+             hover:shadow-lg flex items-center justify-center gap-3 transition-all
+             ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
+  whileHover={!loading ? { scale: 1.04 } : {}}
+  whileTap={!loading ? { scale: 0.97 } : {}}
+>
+  {loading ? (
+    <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+  ) : (
+    <>
+      <FaPaperPlane className="text-lg" /> إرسال المعلومات
+    </>
+  )}
+</motion.button>
         </div>
       </motion.form>
     </main>
